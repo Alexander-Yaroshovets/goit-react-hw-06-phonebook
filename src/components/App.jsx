@@ -63,7 +63,7 @@ export const App = () => {
       <Form title="Phonebook" contacts={contacts} onSubmit={SubmitHandler} />
       <Filter value={filter} onChange={handlFilterChange} />
       <Contacts
-        title="Contacts"
+        title="MyContacts"
         contacts={filterdContacts}
         deleteContact={handleDeleteContact}
       />
