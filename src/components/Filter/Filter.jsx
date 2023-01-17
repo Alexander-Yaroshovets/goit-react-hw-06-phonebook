@@ -1,8 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
+import { useDispatch, useSelector } from 'react-redux';
+
 import { FilterInput, FilterLabel } from './Filter.stayled';
 
-export const Filter = ({ value, onChange }) => {
+import { hendleChangeContact } from 'store/contactSlice';
+
+export const Filter = () => {
+  const dispatch = useDispatch();
+
+  const value = useSelector(state => state.contacts.filter.value);
+
+  const hendelInput = event => {
+    dispatch(hendleChangeContact(event.target.value));
+  };
   return (
     <FilterLabel>
       Find contacts by name
@@ -10,13 +21,8 @@ export const Filter = ({ value, onChange }) => {
         value={value}
         type="text"
         name="filter"
-        onChange={onChange}
+        onChange={hendelInput}
       />
     </FilterLabel>
   );
-};
-
-Filter.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
 };

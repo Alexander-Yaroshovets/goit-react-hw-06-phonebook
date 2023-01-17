@@ -1,5 +1,9 @@
 import { useState } from 'react';
 
+import { useSelector, useDispatch } from 'react-redux';
+
+import { submitContact } from 'store/contactSlice';
+
 import {
   ContactForm,
   FormInput,
@@ -8,12 +12,17 @@ import {
   FormButton,
 } from './Form.styled';
 
-export const Form = ({ contacts, onSubmit, title }) => {
+export const Form = ({ title }) => {
+  const dispatch = useDispatch();
+
+  const contacts = useSelector(state => state.contacts.contacts);
+
   const [name, setname] = useState('');
   const [number, setnumber] = useState('');
 
   const handleInputChange = event => {
     const { name, value } = event.target;
+
     switch (name) {
       case 'name':
         setname(value);
@@ -25,26 +34,27 @@ export const Form = ({ contacts, onSubmit, title }) => {
         return;
     }
 
-    contacts.find(contact => {
-      if (contact.name.toLowerCase() === value.toLowerCase()) {
-        alert(`${value} is olredy in contact`);
-      }
-      switch (name) {
-        case 'name':
-          setname(value);
-          break;
-        case 'number':
-          setnumber(value);
-          break;
-        default:
-      }
-      return name;
-    });
+    contacts &&
+      contacts.find(contact => {
+        if (contact.name.toLowerCase() === value.toLowerCase()) {
+          alert(`${value} is olredy in contact`);
+        }
+        switch (name) {
+          case 'name':
+            setname(value);
+            break;
+          case 'number':
+            setnumber(value);
+            break;
+          default:
+        }
+        return name;
+      });
   };
 
   const handleSubmit = event => {
     event.preventDefault();
-    onSubmit(name, number);
+    dispatch(submitContact(name, number));
     reset();
   };
 
@@ -56,7 +66,6 @@ export const Form = ({ contacts, onSubmit, title }) => {
   return (
     <>
       <FormTitle>{title}</FormTitle>
-
       <ContactForm onSubmit={handleSubmit}>
         <FormLabel>
           Name

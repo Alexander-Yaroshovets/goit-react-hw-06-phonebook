@@ -1,3 +1,9 @@
+import { useSelector, useDispatch } from 'react-redux';
+
+import { hendleDeleteContact } from 'store/contactSlice';
+
+import PropTypes from 'prop-types';
+
 import {
   Contact,
   ContactTitle,
@@ -5,40 +11,51 @@ import {
   ContactButton,
   ContactItem,
 } from './Contacts.styled';
-import PropTypes from 'prop-types';
 
-export const Contacts = ({ contacts, title, deleteContact }) => {
+export const Contacts = ({ title }) => {
+  const contacts = useSelector(state => state.contacts.contacts);
+
+  const dispatch = useDispatch();
+
+  const filterValue = useSelector(state => state.contacts.filter);
+
+  const getFilterdContact = () => {
+    const normalizedFilter = filterValue.toLowerCase();
+
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
+
+  const filteredContacts = getFilterdContact();
+
   return (
     <>
       <ContactTitle>{title}</ContactTitle>
 
       <CotactList>
-        {contacts.map(({ id, name, number }) => {
-          return (
-            <ContactItem key={id}>
-              <Contact>
-                {name} {number}
-              </Contact>
+        {contacts &&
+          filteredContacts.map(({ id, name, number }) => {
+            return (
+              <ContactItem key={id}>
+                <Contact>
+                  {name} {number}
+                </Contact>
 
-              <ContactButton type="button" onClick={() => deleteContact(id)}>
-                delete
-              </ContactButton>
-            </ContactItem>
-          );
-        })}
+                <ContactButton
+                  type="button"
+                  onClick={() => dispatch(hendleDeleteContact(id))}
+                >
+                  delete
+                </ContactButton>
+              </ContactItem>
+            );
+          })}
       </CotactList>
     </>
   );
 };
 
 Contacts.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ),
   title: PropTypes.string.isRequired,
-  deleteContact: PropTypes.func.isRequired,
 };
