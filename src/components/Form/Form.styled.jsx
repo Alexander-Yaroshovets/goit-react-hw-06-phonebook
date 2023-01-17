@@ -50,4 +50,7 @@ export const FormButton = styled.button`
   background-color: aquamarine;
   cursor: pointer;
   align-self: flex-end;
+  &:hover {
+    background-color: #8e8eea;
+  }
 `;

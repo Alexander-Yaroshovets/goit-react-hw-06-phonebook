@@ -5,11 +5,12 @@ import { hendleDeleteContact } from 'store/contactSlice';
 import PropTypes from 'prop-types';
 
 import {
-  Contact,
+  ContactName,
   ContactTitle,
   CotactList,
   ContactButton,
   ContactItem,
+  ContactNumber,
 } from './Contacts.styled';
 
 export const Contacts = ({ title }) => {
@@ -38,10 +39,8 @@ export const Contacts = ({ title }) => {
           filteredContacts.map(({ id, name, number }) => {
             return (
               <ContactItem key={id}>
-                <Contact>
-                  {name} {number}
-                </Contact>
-
+                <ContactName>{name}:</ContactName>
+                <ContactNumber>{number}</ContactNumber>
                 <ContactButton
                   type="button"
                   onClick={() => dispatch(hendleDeleteContact(id))}
